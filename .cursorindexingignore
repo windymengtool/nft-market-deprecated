@@ -1,0 +1,33 @@
+# 依赖目录
+node_modules/
+vendor/
+
+# 构建输出
+dist/
+build/
+out/
+
+# 大型二进制文件和资源
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.ico
+*.pdf
+*.zip
+*.tar.gz
+*.rar
+
+# 参考资料目录（避免索引大量示例代码）
+参考资料/
+
+# Cursor 缓存
+.cursor/cache/
+.cursor-server/
+.cursor/ignores
+
+# 其他不需要索引的目录
+.git/
+.idea/
+.vscode/
+

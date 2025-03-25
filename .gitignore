@@ -15,7 +15,8 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
+node_modules/
 
 # Go workspace file
 go.work
@@ -23,6 +24,34 @@ go.work.sum
 
 # env file
 .env
+.env.local
+.env.*.local
 
-
+# IDE
 .idea/
+.vscode/
+*.iml
+
+# 构建输出
+dist/
+build/
+out/
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Cursor 相关
+.cursor-server/
+
+
+# 临时文件
+*.swp
+*.swo
+*~
