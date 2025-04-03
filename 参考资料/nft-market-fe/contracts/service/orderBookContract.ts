@@ -1,6 +1,83 @@
 import { ethers } from "ethers";
 import EasySwapOrderBookABI from '../abis/EasySwapOrderBook.sol/EasySwapOrderBook.json';
 
+
+
+// 定义枚举类型
+export enum Side {
+    Buy = 0,
+    Sell = 1
+}
+
+export enum SaleKind {
+    FixedPrice = 0,
+    DutchAuction = 1
+}
+
+// 定义接口类型
+export interface Asset {
+    tokenId: string | number;
+    collection: string;
+    amount: number;
+}
+
+export interface Order {
+    side: Side;
+    saleKind: SaleKind;
+    maker: string;
+    nft: Asset;
+    price: string;  // 使用字符串以支持大数
+    expiry: number;
+    salt: number;
+}
+
+/**
+ * 创建NFT订单
+ * @param contract EasySwapOrderBook合约实例
+ * @param orders 订单数组
+ * @param options 交易选项
+ */
+export async function makeOrders(
+    contract: ethers.Contract,
+    orders: Order[],
+    options: {
+        value?: string;  // 如果是买单需要支付ETH
+    } = {}
+) {
+    try {
+        // 验证订单数据
+        orders.forEach(order => {
+            if (!ethers.isAddress(order.maker)) {
+                throw new Error('无效的maker地址');
+            }
+            if (!ethers.isAddress(order.nft.collection)) {
+                throw new Error('无效的NFT合约地址');
+            }
+        });
+
+        // 调用合约方法
+        const tx = await contract.makeOrders(orders, {
+            value: options.value || '0',
+        });
+
+        // 等待交易确认
+        const receipt = await tx.wait();
+
+        // 从事件中获取订单ID
+        const orderKeys = receipt.events
+            ?.filter((event: any) => event.event === 'LogMake')
+            ?.map((event: any) => event.args.orderKey);
+
+        return {
+            orderKeys,
+            transactionHash: receipt.transactionHash
+        };
+
+    } catch (error: any) {
+        throw new Error(`创建订单失败: ${error.message}`);
+    }
+}
+
 export default class OrderBookContract {
     private contract: ethers.Contract | null;
     private signer: ethers.Signer | null;
@@ -31,7 +108,7 @@ export default class OrderBookContract {
     }) {
         await this.init();
         const zeroBytes32 = '0x' + '0'.repeat(64);
-            
+
         const orders = await this.contract!.getOrders(
             params.collection,
             params.tokenId,
@@ -66,4 +143,6 @@ export default class OrderBookContract {
         const tx = await this.contract!.createOrder(orders);
         return tx;
     }
+
+
 }

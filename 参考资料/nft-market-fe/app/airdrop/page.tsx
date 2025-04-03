@@ -9,10 +9,10 @@ export default function Page() {
         <SeasonTabs />
 
         <div className="mt-16 text-center space-y-12">
-          <h1 className="text-6xl font-bold tracking-wider text-[#8e67e9] animate-glow">RCC SEASON 3 FINALE</h1>
+          <h1 className="text-6xl font-bold tracking-wider text-[#8e67e9] animate-glow">RCC SEASON ONE FINALE</h1>
 
           <p className="text-xl font-mono">
-          RCC Season 1 is officially over. It's time to take Blur to the next level - Season 4 now begins.
+          RCC Season 1 is officially over. It's time to take Blur to the next level - Season 2 now begins.
           </p>
 
           <RarityBoxes />

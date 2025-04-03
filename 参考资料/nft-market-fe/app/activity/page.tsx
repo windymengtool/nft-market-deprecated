@@ -1,4 +1,7 @@
+// @ts-nocheck
+
 "use client";
+
 
 import { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
@@ -14,8 +17,9 @@ export default function TradingDashboard() {
   const [transactionData, setTransactionData] = useState([]);
 
   const [collections, setCollections] = useState<any[]>([]);
-
+  const [loading, setLoading] = useState(true);
   async function getActivity() {
+    setLoading(true);
     const res = await activityApi.GetActivity({
       filter_ids: [],
       event_types: [],
@@ -28,6 +32,7 @@ export default function TradingDashboard() {
     setCollections(sortCollections(res.result));
     // @ts-ignore
     setTransactionData(res.result);
+    setLoading(false);
   }
 
   function sortCollections(activities: any[]) {
@@ -219,13 +224,45 @@ export default function TradingDashboard() {
                   <th className="text-left p-4">物品</th>
                   <th className="text-left p-4">稀有度</th>
                   <th className="text-right p-4">价格</th>
-                  <th className="text-right p-4">最高出价</th>
+                  <th className="text-center p-4">最高出价</th>
                   <th className="text-left p-4">从</th>
                   <th className="text-left p-4">至</th>
                   <th className="text-right p-4">时间</th>
                 </tr>
               </thead>
               <tbody>
+
+              {loading && Array.from({ length: 5 }).map((_, index) => (
+                    <tr
+                      key={`skeleton-${index}`}
+                      className="h-[88px] border-gray-800"
+                    >
+                      <td className="w-[200px]">
+                        <div className="h-4 w-[120px] bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                      <td className="w-[120px]">
+                        <div className="h-4 w-16 bg-gray-700 rounded animate-pulse" />
+                      </td>
+                    </tr>
+                  ))}
                 {transactionData.map((item, index) => (
                   <tr key={index} className="border-t border-gray-800">
                     <td className="p-4">
@@ -248,9 +285,10 @@ export default function TradingDashboard() {
                     </td>
                     <td className={`p-4 ${item.rarity?.color}`}>{item.rarity?.name}</td>
                     <td className="p-4 text-right">{weiToEth(item.price)}</td>
-                    <td className="p-4 text-right">{item.highestBid}</td>
-                    <td className="p-4">{item.from}</td>
-                    <td className="p-4">{item.to}</td>
+                    <td className="p-4 text-center">
+                      {item.highestBid ? weiToEth(item.highestBid) : '-'}</td>
+                    <td className="p-4">{item.from || '-'}</td>
+                    <td className="p-4">{item.to || '-'}</td>
                     <td className="p-4 text-right">
                       {formatTime(item.event_time)}
                     </td>
