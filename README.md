@@ -22,3 +22,5 @@
 讲了一些概念、都有哪些第三方服务、theGraph等；
 
 后续：需要自己能讲出来；
+
+视频PPT的图片在`参考资料/EasySwapContract/docs/images`目录;
