@@ -78,3 +78,5 @@
 
 
 # 007---[面试指南](https://meeting.tencent.com/cw/2rxOgnmJd9)
+
+可升级合约的逻辑合约的数据都是存储在代理合约的。
