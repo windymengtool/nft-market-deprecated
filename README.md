@@ -42,3 +42,12 @@
 # 003---(实操)[部署合约](https://meeting.tencent.com/cw/2MeydWzZ4c)
 
 部署合约。
+
+写测试的：https://getwaffle.io/
+
+搜索"npmjs evm-bn":https://www.npmjs.com/package/evm-bn
+
+![image-20250403154701035](https://img.gust.cafe/i/2025/04/03/5719539918288459098-0.webp)
+
+
+
