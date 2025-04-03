@@ -24,3 +24,21 @@
 后续：需要自己能讲出来；
 
 视频PPT的图片在`参考资料/EasySwapContract/docs/images`目录;
+
+
+
+
+
+# 002---[合约拆解](https://meeting.tencent.com/cw/2ZXRdArk9b)
+
+和我找AI分析的差不多；
+
+红黑树做订单存储数据库；
+
+
+
+
+
+# 003---(实操)[部署合约](https://meeting.tencent.com/cw/2MeydWzZ4c)
+
+部署合约。
