@@ -1,3 +1,4 @@
+// 注意:大部分中文注释是AI机翻，措辞不一定准确;
 // 导入必要的测试库和工具
 const { expect } = require("chai")          // 引入chai断言库
 const { ethers, upgrades } = require("hardhat")  // 引入hardhat的ethers和upgrades工具
