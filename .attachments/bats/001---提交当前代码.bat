@@ -4,7 +4,7 @@ set datetimeStr=%return%
 cd ../../
 git add .
 git commit -m %datetimeStr%
-git push origin develop
+git push origin
 
 
 
