@@ -1,4 +1,3 @@
-
 var Side = {
     List: 0,
     Bid: 1
@@ -9,4 +8,4 @@ var SaleKind = {
     FixedPriceForItem: 1
 }
 
-module.exports = { Side, SaleKind };
+module.exports = {Side, SaleKind};

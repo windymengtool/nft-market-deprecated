@@ -1,10 +1,10 @@
 // 注意:大部分中文注释是AI机翻，措辞不一定准确;
 // 导入必要的测试库和工具
-const { expect } = require("chai")          // 引入chai断言库
-const { ethers, upgrades } = require("hardhat")  // 引入hardhat的ethers和upgrades工具
-const { toBn } = require("evm-bn")          // 引入evm-bn用于处理大数字
-const { Side, SaleKind } = require("./common")   // 引入订单类型枚举
-const { exp } = require("@prb/math")        // 引入数学库
+const {expect} = require("chai")          // 引入chai断言库
+const {ethers, upgrades} = require("hardhat")  // 引入hardhat的ethers和upgrades工具
+const {toBn} = require("evm-bn")          // 引入evm-bn用于处理大数字
+const {Side, SaleKind} = require("./common")   // 引入订单类型枚举
+const {exp} = require("@prb/math")        // 引入数学库
 
 // 定义测试账户变量
 let owner, addr1, addr2, addrs
@@ -38,7 +38,7 @@ describe("EasySwap Test", function () {
         testLibOrder = await testLibOrder.deploy()                         // 部署LibOrder测试合约
         testERC721 = await testERC721.deploy()                            // 部署ERC721测试合约
         // 使用代理模式部署Vault合约
-        esVault = await upgrades.deployProxy(esVault, { initializer: 'initialize' });
+        esVault = await upgrades.deployProxy(esVault, {initializer: 'initialize'});
 
         // 设置OrderBook合约的初始化参数
         newProtocolShare = 200;                // 设置协议费率
@@ -46,7 +46,7 @@ describe("EasySwap Test", function () {
         EIP712Name = "EasySwapOrderBook"      // EIP712域名
         EIP712Version = "1"                   // EIP712版本
         // 使用代理模式部署OrderBook合约
-        esDex = await upgrades.deployProxy(esDex, [newProtocolShare, newESVault, EIP712Name, EIP712Version], { initializer: 'initialize' });
+        esDex = await upgrades.deployProxy(esDex, [newProtocolShare, newESVault, EIP712Name, EIP712Version], {initializer: 'initialize'});
 
         // 铸造测试用NFT
         nft = testERC721.address
@@ -62,7 +62,7 @@ describe("EasySwap Test", function () {
         await testERC721.mint(owner.address, 9)
         await testERC721.mint(owner.address, 10)
         await testERC721.mint(owner.address, 11)
-        
+
         // 授权Vault合约操作NFT
         testERC721.setApprovalForAll(esVault.address, true)
 
@@ -153,10 +153,10 @@ describe("EasySwap Test", function () {
             }
             const orders = [order];
 
-            orderKeys = await esDex.callStatic.makeOrders(orders, { value: toBn("0.02") })
+            orderKeys = await esDex.callStatic.makeOrders(orders, {value: toBn("0.02")})
             expect(orderKeys[0]).to.not.equal(Byte32Zero)
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.02") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.02")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.01"), toBn("0.01")]);
 
             const orderHash = await testLibOrder.getOrderHash(order)
@@ -193,11 +193,11 @@ describe("EasySwap Test", function () {
             }
             const orders = [listOrder, bidOrder];
 
-            orderKeys = await esDex.callStatic.makeOrders(orders, { value: toBn("0.02") })
+            orderKeys = await esDex.callStatic.makeOrders(orders, {value: toBn("0.02")})
             expect(orderKeys[0]).to.not.equal(Byte32Zero)
             expect(orderKeys[1]).to.not.equal(Byte32Zero)
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.02") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.02")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.01"), toBn("0.01")]);
 
             const listOrderHash = await testLibOrder.getOrderHash(listOrder)
@@ -274,7 +274,7 @@ describe("EasySwap Test", function () {
             // await expect(await esDex.makeOrders(orders, { value: toBn("0.05") }))
             //     .to.emit(esDex, "LogMake")
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.07") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.07")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.05"), toBn("0.05")]);
 
             const orderHash = await testLibOrder.getOrderHash(order)
@@ -314,7 +314,7 @@ describe("EasySwap Test", function () {
                 salt: salt,
             }
 
-            await expect(await esDex.connect(addr1).makeOrders([buyOrder], { value: toBn("0.04") }))
+            await expect(await esDex.connect(addr1).makeOrders([buyOrder], {value: toBn("0.04")}))
                 .to.emit(esDex, "LogMake")
 
             const orderHash = await testLibOrder.getOrderHash(buyOrder)
@@ -496,7 +496,7 @@ describe("EasySwap Test", function () {
             }
             const orders = [order1, order2];
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.04") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.04")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.02"), toBn("0.02")]);
 
             const orderHash = await testLibOrder.getOrderHash(order1)
@@ -541,11 +541,11 @@ describe("EasySwap Test", function () {
             }
             editDetails = [editDetail1, editDetail2]
 
-            newOrderKeys = await esDex.callStatic.editOrders(editDetails, { value: toBn("0.09") })
+            newOrderKeys = await esDex.callStatic.editOrders(editDetails, {value: toBn("0.09")})
             expect(newOrderKeys[0]).to.not.equal(Byte32Zero)
             expect(newOrderKeys[1]).to.not.equal(Byte32Zero)
 
-            await expect(await esDex.editOrders(editDetails, { value: toBn("0.1") }))
+            await expect(await esDex.editOrders(editDetails, {value: toBn("0.1")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.08"), toBn("0.08")]);
 
             const newOrderHash = await testLibOrder.getOrderHash(newOrder1)
@@ -599,7 +599,7 @@ describe("EasySwap Test", function () {
             }
             const orders = [order1, order2];
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.04") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.04")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.02"), toBn("0.02")]);
 
             const orderHash = await testLibOrder.getOrderHash(order1)
@@ -644,11 +644,11 @@ describe("EasySwap Test", function () {
             }
             editDetails = [editDetail1, editDetail2]
 
-            newOrderKeys = await esDex.callStatic.editOrders(editDetails, { value: toBn("0.04") })
+            newOrderKeys = await esDex.callStatic.editOrders(editDetails, {value: toBn("0.04")})
             expect(newOrderKeys[0]).to.not.equal(Byte32Zero)
             expect(newOrderKeys[1]).to.not.equal(Byte32Zero)
 
-            await expect(await esDex.editOrders(editDetails, { value: toBn("0.04") }))
+            await expect(await esDex.editOrders(editDetails, {value: toBn("0.04")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.025"), toBn("0.025")]);
 
             const newOrderHash = await testLibOrder.getOrderHash(newOrder1)
@@ -702,7 +702,7 @@ describe("EasySwap Test", function () {
             }
             const orders = [order1, order2];
 
-            await expect(await esDex.makeOrders(orders, { value: toBn("0.04") }))
+            await expect(await esDex.makeOrders(orders, {value: toBn("0.04")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.02"), toBn("0.02")]);
 
             const orderHash = await testLibOrder.getOrderHash(order1)
@@ -747,11 +747,11 @@ describe("EasySwap Test", function () {
             }
             editDetails = [editDetail1, editDetail2]
 
-            newOrderKeys = await esDex.callStatic.editOrders(editDetails, { value: toBn("0.04") })
+            newOrderKeys = await esDex.callStatic.editOrders(editDetails, {value: toBn("0.04")})
             expect(newOrderKeys[0]).to.not.equal(Byte32Zero)
             expect(newOrderKeys[1]).to.not.equal(Byte32Zero)
 
-            await expect(await esDex.editOrders(editDetails, { value: toBn("0.04") }))
+            await expect(await esDex.editOrders(editDetails, {value: toBn("0.04")}))
                 .to.changeEtherBalances([owner, esVault], [toBn("-0.026"), toBn("0.026")]);
 
             const newOrderHash = await testLibOrder.getOrderHash(newOrder1)
@@ -819,7 +819,7 @@ describe("EasySwap Test", function () {
                 }
 
                 // 执行订单匹配并验证
-                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.03") }))
+                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.03")}))
                     .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.0002"), toBn("0.0098"), toBn("-0.01")]);
                 // 验证NFT所有权转移
                 expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
@@ -843,7 +843,7 @@ describe("EasySwap Test", function () {
                 }
 
                 // 创建买单并支付ETH
-                await expect(await esDex.connect(addr1).makeOrders([buyOrder], { value: toBn("0.04") }))
+                await expect(await esDex.connect(addr1).makeOrders([buyOrder], {value: toBn("0.04")}))
                     .to.emit(esDex, "LogMake")
 
                 const orderHash = await testLibOrder.getOrderHash(buyOrder)
@@ -891,7 +891,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(await esDex.connect(addr1).makeOrders([buyOrder], { value: toBn("0.01") }))
+                await expect(await esDex.connect(addr1).makeOrders([buyOrder], {value: toBn("0.01")}))
                     .to.emit(esDex, "LogMake")
 
                 const orderHash = await testLibOrder.getOrderHash(buyOrder)
@@ -945,7 +945,7 @@ describe("EasySwap Test", function () {
                     .to.emit(esDex, "LogMake")
 
                 // 尝试用相同订单匹配，应该失败
-                await expect(esDex.connect(addr1).matchOrder(order, order, { value: toBn("0.01") }))
+                await expect(esDex.connect(addr1).matchOrder(order, order, {value: toBn("0.01")}))
                     .to.be.revertedWith("HD: same order")
             });
 
@@ -972,7 +972,7 @@ describe("EasySwap Test", function () {
                 }
 
                 // 验证匹配失败
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") }))
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.01")}))
                     .to.be.revertedWith("HD: side mismatch")
             });
 
@@ -997,7 +997,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") }))
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.01")}))
                     .to.be.revertedWith("HD: kind mismatch")
             });
 
@@ -1038,7 +1038,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") })).to.be.revertedWith("HD: kind mismatch")
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.01")})).to.be.revertedWith("HD: kind mismatch")
                 // await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") }))
                 //     .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.0002"), toBn("0.0098"), toBn("-0.01")]);
                 // expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
@@ -1082,7 +1082,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") })).to.be.revertedWith("HD: asset mismatch")
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.01")})).to.be.revertedWith("HD: asset mismatch")
             });
 
             it("should revert if order was canceled", async () => {
@@ -1125,7 +1125,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.01") })).to.be.revertedWith("HD: order closed")
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.01")})).to.be.revertedWith("HD: order closed")
             });
 
             it("should revert if list order was filled", async () => {
@@ -1165,11 +1165,11 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.03") }))
+                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.03")}))
                     .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.0002"), toBn("0.0098"), toBn("-0.01")]);
                 expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
 
-                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("0.03") })).to.be.revertedWith("HD: order closed")
+                await expect(esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("0.03")})).to.be.revertedWith("HD: order closed")
             });
 
             it("should revert if bid order was filled", async () => {
@@ -1188,7 +1188,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(await esDex.connect(addr1).makeOrders([buyOrder], { value: toBn("0.02") }))
+                await expect(await esDex.connect(addr1).makeOrders([buyOrder], {value: toBn("0.02")}))
                     .to.emit(esDex, "LogMake")
 
                 const orderHash = await testLibOrder.getOrderHash(buyOrder)
@@ -1254,7 +1254,7 @@ describe("EasySwap Test", function () {
                 }
 
                 orders = [bidOrder]
-                await expect(await esDex.connect(addr1).makeOrders(orders, { value: toBn("0.02") }))
+                await expect(await esDex.connect(addr1).makeOrders(orders, {value: toBn("0.02")}))
                     .to.changeEtherBalances([addr1, esVault], [toBn("-0.01"), toBn("0.01")]);
 
                 const orderHash = await testLibOrder.getOrderHash(bidOrder)
@@ -1325,7 +1325,7 @@ describe("EasySwap Test", function () {
                     salt: salt,
                 }
 
-                await expect(esDex.connect(owner).matchOrder(order, bidOrder, { value: toBn("0.01") }))
+                await expect(esDex.connect(owner).matchOrder(order, bidOrder, {value: toBn("0.01")}))
                     .to.be.revertedWith("HD: value > 0")
             })
 
@@ -1453,7 +1453,7 @@ describe("EasySwap Test", function () {
                 }
 
                 expect(await testERC721.ownerOf(0)).to.equal(esVault.address)
-                await expect(await esDex.connect(addr1).matchOrder(listOrder, order, { value: toBn("0.01") }))
+                await expect(await esDex.connect(addr1).matchOrder(listOrder, order, {value: toBn("0.01")}))
                     .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.0002"), toBn("0.0098"), toBn("-0.01")]);
                 expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
             })
@@ -1475,7 +1475,7 @@ describe("EasySwap Test", function () {
                 }
                 orders = [order]
 
-                await expect(await esDex.connect(addr1).makeOrders(orders, { value: toBn("0.04") }))
+                await expect(await esDex.connect(addr1).makeOrders(orders, {value: toBn("0.04")}))
                     .to.changeEtherBalances([addr1, esVault], [toBn("-0.01"), toBn("0.01")]);
 
                 expect(await testERC721.ownerOf(0)).to.equal(esVault.address)
@@ -1582,7 +1582,7 @@ describe("EasySwap Test", function () {
 
                 orders = [order]
 
-                await expect(await esDex.connect(addr1).makeOrders(orders, { value: toBn("0.004") }))
+                await expect(await esDex.connect(addr1).makeOrders(orders, {value: toBn("0.004")}))
                     .to.changeEtherBalances([addr1, esVault], [toBn("-0.002"), toBn("0.002")]);
 
 
@@ -1668,11 +1668,11 @@ describe("EasySwap Test", function () {
             }
             matchDetails = [matchDetail1, matchDetail2]
 
-            successes = await esDex.connect(addr1).callStatic.matchOrders(matchDetails, { value: toBn("0.06") })
+            successes = await esDex.connect(addr1).callStatic.matchOrders(matchDetails, {value: toBn("0.06")})
             expect(successes[0]).to.equal(true)
             expect(successes[1]).to.equal(true)
 
-            await expect(await esDex.connect(addr1).matchOrders(matchDetails, { value: toBn("0.06") }))
+            await expect(await esDex.connect(addr1).matchOrders(matchDetails, {value: toBn("0.06")}))
                 .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.0004"), toBn("0.0196"), toBn("-0.02")]);
 
             expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
@@ -1712,7 +1712,7 @@ describe("EasySwap Test", function () {
                 salt: salt,
             }
 
-            await expect(await esDex.connect(addr1).makeOrders([buyOrder, buyOrder2], { value: toBn("0.04") }))
+            await expect(await esDex.connect(addr1).makeOrders([buyOrder, buyOrder2], {value: toBn("0.04")}))
                 .to.emit(esDex, "LogMake")
 
             // market sell
@@ -1787,7 +1787,7 @@ describe("EasySwap Test", function () {
 
             // 执行批量转移
             await esVault.batchTransferERC721(to, assets)
-            
+
             // 验证转移结果
             expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
             expect(await testERC721.ownerOf(1)).to.equal(addr1.address)
@@ -1824,7 +1824,7 @@ describe("EasySwap Test", function () {
                 }
 
                 // 执行订单匹配，产生协议费
-                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, { value: toBn("3") }))
+                await expect(await esDex.connect(addr1).matchOrder(order, buyOrder, {value: toBn("3")}))
                     .to.changeEtherBalances([esDex, owner, addr1], [toBn("0.02"), toBn("0.98"), toBn("-1")]);
                 expect(await testERC721.ownerOf(0)).to.equal(addr1.address)
             }

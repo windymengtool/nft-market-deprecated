@@ -1,14 +1,14 @@
-const { ethers, upgrades } = require("hardhat")
-const { Side, SaleKind } = require("../test/common")
-const { toBn } = require("evm-bn")
+const {ethers, upgrades} = require("hardhat")
+const {Side, SaleKind} = require("../test/common")
+const {toBn} = require("evm-bn")
 
 /**  * 2024/12/22 in sepolia testnet
  * esVault contract deployed to: 0x75EC7448bC37c1FB484520C45b40F1564eBd0d19
-     esVault ImplementationAddress: 
-     esVault AdminAddress: 
-   esDex contract deployed to: 0x5560e1c2E0260c2274e400d80C30CDC4B92dC8ac
-      esDex ImplementationAddress: 
-      esDex AdminAddress: 
+ esVault ImplementationAddress:
+ esVault AdminAddress:
+ esDex contract deployed to: 0x5560e1c2E0260c2274e400d80C30CDC4B92dC8ac
+ esDex ImplementationAddress:
+ esDex AdminAddress:
  */
 
 const esDex_name = "EasySwapOrderBook";
@@ -22,6 +22,7 @@ const erc721_address = "0xF2e0BA02a187F19F5A390E4f990c684d81A833A0"
 
 let esDex, esVault, testERC721
 let deployer
+
 async function main() {
     [deployer, trader] = await ethers.getSigners()
     console.log("deployer: ", deployer.address)
@@ -164,7 +165,7 @@ async function testMatchOrder() {
         salt: salt,
     }
 
-    tx = await esDex.connect(trader).matchOrder(sellOrder, buyOrder, { value: toBn("0.002") });
+    tx = await esDex.connect(trader).matchOrder(sellOrder, buyOrder, {value: toBn("0.002")});
     txRec = await tx.wait();
     console.log("matchOrder tx: ", txRec.hash);
 }
@@ -192,7 +193,7 @@ async function getfillsStat(orderKey) {
 }
 
 async function withdrawProtocolFee() {
-    await esDex.withdrawETH(deployer.address, toBn("0.00011"), { gasLimit: 100000 });
+    await esDex.withdrawETH(deployer.address, toBn("0.00011"), {gasLimit: 100000});
     console.log("WithdrawETH succeed.");
 
 }

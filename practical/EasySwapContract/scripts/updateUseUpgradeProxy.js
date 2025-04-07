@@ -1,4 +1,4 @@
-const { ethers, upgrades } = require("hardhat");
+const {ethers, upgrades} = require("hardhat");
 
 const esDex_name = "EasySwapOrderBook";
 const esDex_address = "0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895"
@@ -8,11 +8,11 @@ const esVault_address = "0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834"
 
 /**  * 2024/12/22 in sepolia testnet
  * esVault contract deployed to: 0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834
-     esVault ImplementationAddress: 
-     esVault AdminAddress: 
-   esDex contract deployed to: 0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895
-      esDex ImplementationAddress:  0x5eF36e709cbdEB672554195F5E7A491Cf921E597
-      esDex AdminAddress: 
+ esVault ImplementationAddress:
+ esVault AdminAddress:
+ esDex contract deployed to: 0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895
+ esDex ImplementationAddress:  0x5eF36e709cbdEB672554195F5E7A491Cf921E597
+ esDex AdminAddress:
  */
 
 //use this scrips to upgrade contract if have a network file by importing previous deployments, if not use 'updateUsePerpareUpgrade' scripts
@@ -28,12 +28,12 @@ async function main() {
     // esDex = await esDex.deployed();
     // console.log("esDex upgraded");
     // console.log(await upgrades.erc1967.getImplementationAddress(esDex_address), " getNewImplementationAddress")
-    
+
     // esVault
     // let esVault = await ethers.getContractFactory(esVault_name);
     // console.log(await upgrades.erc1967.getImplementationAddress(esVault_address), " getOldImplementationAddress")
     // console.log(await upgrades.erc1967.getAdminAddress(esVault_address), " getAdminAddress")
-    
+
     // esVault = await upgrades.upgradeProxy(esVault_address, esVault);
     // esVault = await esVault.deployed();
     // console.log("esVault upgraded");
