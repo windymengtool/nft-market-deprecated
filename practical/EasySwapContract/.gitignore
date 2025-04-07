@@ -14,3 +14,5 @@ artifacts
 .openzeppelin
 .DS_Store
 contracts/.DS_Store
+
+package-lock.json
