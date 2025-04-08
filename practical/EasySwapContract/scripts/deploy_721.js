@@ -13,7 +13,8 @@ async function main() {
     //mint
     let testERC721Address = "0x4460376b7048848FDf40113e779F0b36630c9455"; // 上一步部署合约得到的地址
     let testERC721 = await (await ethers.getContractFactory("TestERC721")).attach(testERC721Address)
-    tx = await testERC721.mint(deployer.address, 50); // 为 [deployer.address] 铸造 [50] 个 NFT
+    // `_mint(address to, uint256 tokenId)`
+    tx = await testERC721.mint(deployer.address, 0); // 为 [deployer.address] 铸造一个tokenId=0 的NFT
     await tx.wait()
     console.log("mint tx:", tx.hash)
 }
