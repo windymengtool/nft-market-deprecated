@@ -9,21 +9,21 @@ const {config: dotenvConfig} = require("dotenv")
 const {resolve} = require("path")
 dotenvConfig({path: resolve(__dirname, "./.env")})
 
-const SEPOLIA_ALCHEMY_PK_ONE = process.env.SEPOLIA_ALCHEMY_PK_ONE
-const SEPOLIA_ALCHEMY_PK_TWO = process.env.SEPOLIA_ALCHEMY_PK_TWO
+// const SEPOLIA_ALCHEMY_PK_ONE = process.env.SEPOLIA_ALCHEMY_PK_ONE
+// const SEPOLIA_ALCHEMY_PK_TWO = process.env.SEPOLIA_ALCHEMY_PK_TWO
 const SEPOLIA_INFURA_PK_ONE = process.env.SEPOLIA_INFURA_PK_ONE
 const SEPOLIA_INFURA_PK_TWO = process.env.SEPOLIA_INFURA_PK_TWO
-if (!SEPOLIA_ALCHEMY_PK_ONE && !SEPOLIA_INFURA_PK_ONE) {
-    throw new Error("Please set at least one private key in a .env file")
+if (!SEPOLIA_INFURA_PK_ONE) {
+    throw new Error("Please set SEPOLIA_INFURA_PK_ONE in a .env file")
 }
 
-const MAINNET_PK = process.env.MAINNET_PK
-const MAINNET_ALCHEMY_AK = process.env.MAINNET_ALCHEMY_AK
+// const MAINNET_PK = process.env.MAINNET_PK
+// const MAINNET_ALCHEMY_AK = process.env.MAINNET_ALCHEMY_AK
 
-const SEPOLIA_ALCHEMY_AK = process.env.SEPOLIA_ALCHEMY_AK
+// const SEPOLIA_ALCHEMY_AK = process.env.SEPOLIA_ALCHEMY_AK
 const SEPOLIA_INFURA_AK = process.env.SEPOLIA_INFURA_AK
-if (!SEPOLIA_ALCHEMY_AK && !SEPOLIA_INFURA_AK) {
-    throw new Error("Please set either SEPOLIA_ALCHEMY_AK or SEPOLIA_INFURA_AK in a .env file")
+if (!SEPOLIA_INFURA_AK) {
+    throw new Error("Please set SEPOLIA_INFURA_AK in a .env file")
 }
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -42,16 +42,16 @@ module.exports = {
         }
     },
     networks: {
-        mainnet: {
-            url: `https://eth-mainnet.g.alchemy.com/v2/${MAINNET_ALCHEMY_AK}`,
-            accounts: [`${MAINNET_PK}`],
-            saveDeployments: true,
-            chainId: 1,
-        },
-        sepolia_alchemy: {
-            url: `https://eth-sepolia.g.alchemy.com/v2/${SEPOLIA_ALCHEMY_AK}`,
-            accounts: [`${SEPOLIA_ALCHEMY_PK_ONE}`, `${SEPOLIA_ALCHEMY_PK_TWO}`],
-        },
+        // mainnet: {
+        //     url: `https://eth-mainnet.g.alchemy.com/v2/${MAINNET_ALCHEMY_AK}`,
+        //     accounts: [`${MAINNET_PK}`],
+        //     saveDeployments: true,
+        //     chainId: 1,
+        // },
+        // sepolia_alchemy: {
+        //     url: `https://eth-sepolia.g.alchemy.com/v2/${SEPOLIA_ALCHEMY_AK}`,
+        //     accounts: [`${SEPOLIA_ALCHEMY_PK_ONE}`, `${SEPOLIA_ALCHEMY_PK_TWO}`],
+        // },
         sepolia_infura: {
             url: `https://sepolia.infura.io/v3/${SEPOLIA_INFURA_AK}`,
             accounts: [`${SEPOLIA_INFURA_PK_ONE}`, `${SEPOLIA_INFURA_PK_TWO}`],
