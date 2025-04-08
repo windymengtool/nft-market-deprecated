@@ -24,7 +24,7 @@ out/
 # Cursor 缓存
 .cursor/cache/
 .cursor-server/
-.cursor/ignores
+.cursor/ignores/
 
 # 其他不需要索引的目录
 .git/
