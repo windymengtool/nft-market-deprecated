@@ -6,9 +6,9 @@ const {ethers, upgrades} = require("hardhat")
  esVault ImplementationAddress: 0x0e3128c2155A1E27f8e066DBB2b81A6C42854b61
  esVault AdminAddress: 0x43BaDe3f7A206e10632DD93Aac0754b4b2F717b9
  //
- esDex contract deployed to: 0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895
- esDex ImplementationAddress: 0x17B2d83BFE9089cd1D676dE8aebaDCA561f55c96
- esDex AdminAddress: 0xe839419C14188F7b79a0E4C09cFaF612398e7795
+ esDex contract deployed to: 0xBd3e0D701198D973D74d3367b144c7d7918a12AF
+ esDex ImplementationAddress: 0x112192efadE2c8676E6566fDE57Faa0137a1F4ED
+ esDex AdminAddress: 0x43BaDe3f7A206e10632DD93Aac0754b4b2F717b9
  */
 
 async function main() {
