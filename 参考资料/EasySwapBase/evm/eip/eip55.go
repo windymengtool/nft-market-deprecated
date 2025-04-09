@@ -16,7 +16,7 @@ func ToCheckSumAddress(address string) (string, error) {
 	if strings.HasPrefix(address, "0x") {
 		address = address[2:]
 	}
-
+	
 	bytes, err := hex.DecodeString(address)
 	if err != nil {
 		return "", err

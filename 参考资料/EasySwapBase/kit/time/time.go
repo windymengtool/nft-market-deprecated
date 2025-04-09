@@ -249,10 +249,9 @@ func SleepMicrosecond(n int64) {
 
 // StringToTime returns time.Time representation of str value parsed according to layout.
 // layout example:
-//
-//	20060102150405
-//	2006-01-02 15:04:05
-//	2006/01/02 15/04/05
+//     20060102150405
+//     2006-01-02 15:04:05
+//     2006/01/02 15/04/05
 func StringToTime(str, layout string, location ...*time.Location) (time.Time, error) {
 	loc := getLocation(location...)
 	if len(str) != len(layout) {
@@ -265,10 +264,9 @@ func StringToTime(str, layout string, location ...*time.Location) (time.Time, er
 // StringToUnix returns unix second timestamp representation of str value parsed according to layout.
 // If str parsed err, it returns now unix second timestamp.
 // layout example:
-//
-//	20060102150405
-//	2006-01-02 15:04:05
-//	2006/01/02 15/04/05
+//     20060102150405
+//     2006-01-02 15:04:05
+//     2006/01/02 15/04/05
 func StringToUnix(str, layout string, location ...*time.Location) int64 {
 	t, err := StringToTime(str, layout, location...)
 	if err != nil {
