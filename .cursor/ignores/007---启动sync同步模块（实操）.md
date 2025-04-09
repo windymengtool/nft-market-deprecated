@@ -729,7 +729,7 @@ PS:EasySwapBackend模块同理；
 
 
 
-# 004---定时任务如何触发
+## 05---定时任务如何触发
 
 > 让我帮您查找定时任务相关的代码。首先我会搜索一下代码库中与定时任务相关的内容。
 >
@@ -787,7 +787,7 @@ PS:EasySwapBackend模块同理；
 
 
 
-# ？？---处理toml
+# 04---处理toml
 
 拷贝"config_import.toml.template"到同级目录并重命名"config_import.toml",修改属性：
 
@@ -795,4 +795,64 @@ PS:EasySwapBackend模块同理；
 dex_address = "0x5560e1c2E0260c2274e400d80C30CDC4B92dC8ac" # undeploy
 ```
 
-value按照实际部署的地址值填写。
+value按照实际部署的地址值填写。这里填的是视频展示的已部署地址；
+
+
+
+还要改：
+
+```toml
+[ankr_cfg]
+api_key=""
+https_url="https://rpc.ankr.com/eth_sepolia"
+#https_url="https://rpc.ankr.com/optimism"
+```
+
+这里是出现报错后问AI的答案：
+
+> 是的，Ankr 和 Infura 都是区块链基础设施服务提供商，它们提供类似的服务，但有一些区别：
+>
+> 1. 共同点：
+>    - 都提供区块链节点服务（RPC节点）
+>    - 都支持多个区块链网络（如以太坊主网、测试网等）
+>    - 都提供 API 接口供开发者使用
+>    - 都有免费和付费套餐
+>
+> 2. 主要区别：
+>    - **网络覆盖**：
+>      - Infura：主要专注于以太坊生态
+>      - Ankr：支持更多区块链网络，包括以太坊、BSC、Polygon、Avalanche 等
+>
+>    - **服务特点**：
+>      - Infura：更专注于企业级服务，稳定性较好
+>      - Ankr：提供更多样化的服务，包括节点即服务（NaaS）、质押服务等
+>
+>    - **免费额度**：
+>      - Infura：每天 100,000 次请求
+>      - Ankr：每天 250,000 次请求
+>
+>    - **API 访问方式**：
+>      - Infura：使用项目 ID 作为认证
+>      - Ankr：使用 API 密钥作为认证
+>
+> 3. 使用建议：
+>    - 如果主要开发以太坊应用，Infura 是个不错的选择
+>    - 如果需要支持多个区块链网络，Ankr 可能更适合
+>    - 对于测试环境，两者都可以使用，选择哪个主要看个人偏好和项目需求
+>
+> 在我们的项目中，由于使用的是 Sepolia 测试网，两者都可以使用。如果你已经有 Infura 的账号和项目 ID，我建议使用 Infura，因为配置更简单，而且免费额度对于测试环境来说已经足够了。
+>
+> 需要我帮你修改配置文件使用 Infura 吗？
+
+
+
+因此**改为**我在用的infura：
+
+```toml
+[ankr_cfg]
+api_key="你的Infura项目ID"
+https_url="https://sepolia.infura.io/v3/你的Infura项目ID"
+```
+
+
+
