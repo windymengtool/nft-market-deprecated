@@ -851,7 +851,7 @@ https_url="https://rpc.ankr.com/eth_sepolia"
 ```toml
 [ankr_cfg]
 api_key="你的Infura项目ID"
-https_url="https://sepolia.infura.io/v3/你的Infura项目ID"
+https_url="https://sepolia.infura.io/v3/"
 ```
 
 
