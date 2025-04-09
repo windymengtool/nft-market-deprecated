@@ -12,6 +12,8 @@
 
 # 001---准备数据库和redis
 
+## 01---转换
+
 分析"docker-compose-arm64.yml"转为win10免安装版mysql和redis的内容：
 
 ```sql
@@ -40,6 +42,42 @@ EasySwapSync/db/migrations/01_create.sql
 ```
 
 ![image-20250409202003260](https://img.gust.cafe/i/2025/04/09/5721783681866013268-0.webp)
+
+
+
+
+
+## 02---各表结构**分析**
+
+我来分析一下这个SQL文件中的表结构及其作用。这是一个NFT市场的数据库设计，主要针对Sepolia测试网络。以下是各个表的详细分析：
+
+| 表名                                  | 主要作用           | 关键字段说明                                                 |
+| ------------------------------------- | ------------------ | ------------------------------------------------------------ |
+| `ob_activity_sepolia`                 | 记录NFT市场活动    | - `activity_type`: 活动类型(1-10)<br>- `maker/taker`: 交易双方地址<br>- `collection_address`: NFT集合地址<br>- `token_id`: NFT标识<br>- `price`: 交易价格 |
+| `ob_collection_sepolia`               | NFT集合信息        | - `address`: 合约地址<br>- `name/symbol`: 集合名称/标识<br>- `owner_amount`: 持有者数量<br>- `item_amount`: NFT总量<br>- `floor_price`: 地板价 |
+| `ob_collection_floor_price_sepolia`   | 记录集合地板价历史 | - `collection_address`: 集合地址<br>- `price`: 地板价<br>- `event_time`: 时间戳 |
+| `ob_collection_import_record_sepolia` | 记录集合导入状态   | - `collection_address`: 集合地址<br>- `finished_stage`: 完成阶段(0-2) |
+| `ob_global_collection_sepolia`        | 全局集合管理       | - `collection_address`: 集合地址<br>- `token_standard`: 代币标准<br>- `import_status`: 导入状态 |
+| `ob_item_sepolia`                     | NFT物品信息        | - `token_id`: NFT标识<br>- `owner`: 拥有者<br>- `list_price`: 上架价格<br>- `sale_price`: 销售价格 |
+| `ob_item_external_sepolia`            | NFT外部资源信息    | - `meta_data_uri`: 元数据地址<br>- `image_uri`: 图片地址<br>- `video_uri`: 视频地址 |
+| `ob_item_trait_sepolia`               | NFT属性特征        | - `trait`: 属性名称<br>- `trait_value`: 属性值               |
+| `ob_order_sepolia`                    | 订单信息           | - `order_id`: 订单哈希<br>- `order_status`: 订单状态<br>- `price`: 价格<br>- `maker/taker`: 交易双方 |
+| `ob_user`                             | 用户信息           | - `address`: 用户地址<br>- `is_allowed`: 是否允许访问        |
+| `ob_indexed_status`                   | 区块同步状态       | - `chain_id`: 链ID<br>- `last_indexed_block`: 最后同步区块<br>- `index_type`: 索引类型 |
+
+这个数据库设计主要服务于NFT市场的以下功能：
+1. NFT交易记录追踪
+2. 集合信息管理
+3. 用户资产管理
+4. 订单管理
+5. 市场数据统计
+6. 区块同步状态监控
+
+所有表都采用了`utf8mb4_general_ci`字符集，支持完整的Unicode字符集，适合存储NFT相关的各种数据。
+
+---
+
+
 
 
 
@@ -97,7 +135,7 @@ PS:EasySwapBackend模块同理；
 
 
 
-# 003---分析代码
+# 003---入口代码分析
 
 ## 01---入口`main.go`&`root.go`
 
@@ -689,3 +727,72 @@ PS:EasySwapBackend模块同理；
 
 
 
+
+
+# 004---定时任务如何触发
+
+> 让我帮您查找定时任务相关的代码。首先我会搜索一下代码库中与定时任务相关的内容。
+>
+>
+> Search files...
+> 让我帮您分析一下定时任务的相关内容：
+>
+> 1. 定时任务的主要实现位置：
+> - 在 `practical/EasySwapSync/service/orderbookindexer/service.go` 中有一个 `UpKeepingCollectionFloorChangeLoop` 函数，这是一个定时任务，用于维护NFT集合的地板价变化。
+> - 在 `practical/EasySwapBase/ordermanager/listcount.go` 中有一个 `listCountProcess` 函数，用于处理和维护NFT集合的上架数量统计。
+> - 在 `practical/EasySwapBase/ordermanager/expiredorder.go` 中有一个 `orderExpiryProcess` 函数，用于处理订单过期的逻辑。
+>
+> 2. 定时任务的启动方式：
+> - 这些定时任务是通过 `practical/EasySwapSync/cmd/daemon.go` 中的 `DaemonCmd` 命令启动的。
+> - 具体启动流程：
+>   1. 通过 `service.New(ctx, cfg)` 初始化服务
+>   2. 调用 `s.Start()` 启动服务
+>   3. 服务启动时会自动启动这些定时任务
+>
+> 3. 主要定时任务的功能：
+> - `UpKeepingCollectionFloorChangeLoop`: 
+>   - 使用 `time.NewTicker` 创建定时器
+>   - 每天执行一次删除过期地板价记录
+>   - 每 `MaxCollectionFloorTimeDifference` 秒更新一次地板价
+>
+> - `listCountProcess`:
+>   - 每分钟执行一次更新
+>   - 统计和维护NFT集合的上架数量
+>   - 将统计结果缓存到Redis
+>
+> - `orderExpiryProcess`:
+>   - 每秒检查一次时间轮
+>   - 处理到期的订单
+>   - 更新订单状态和地板价
+>
+> 4. 配置相关：
+> - 定时任务的配置可以在 `practical/EasySwapSync/config/config_import.toml.template` 中找到
+> - 包括数据库连接、Redis配置、链配置等
+>
+> 要运行这些定时任务，您需要：
+> 1. 确保配置文件正确（`config_import.toml`）
+> 2. 运行以下命令：
+> ```bash
+> cd practical/EasySwapSync
+> go run main.go daemon -c "./config/config_import.toml"
+> ```
+>
+> 或者使用 Makefile 中的命令：
+> ```bash
+> cd practical/EasySwapSync
+> make run
+> ```
+>
+> 这些定时任务会在后台持续运行，直到收到终止信号（SIGINT 或 SIGTERM）。
+
+
+
+# ？？---处理toml
+
+拷贝"config_import.toml.template"到同级目录并重命名"config_import.toml",修改属性：
+
+```toml
+dex_address = "0x5560e1c2E0260c2274e400d80C30CDC4B92dC8ac" # undeploy
+```
+
+value按照实际部署的地址值填写。
