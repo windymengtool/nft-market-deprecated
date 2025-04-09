@@ -16,7 +16,7 @@
 go mod tidy
 ```
 
-
+还报红则需要重启IDE；
 
 
 
@@ -50,4 +50,8 @@ EasySwapSync/db/migrations/01_create.sql
 ```
 
 ![image-20250409202003260](https://img.gust.cafe/i/2025/04/09/5721783681866013268-0.webp)
+
+
+
+
 
