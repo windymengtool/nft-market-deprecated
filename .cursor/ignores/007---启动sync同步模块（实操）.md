@@ -190,7 +190,7 @@ PS:EasySwapBackend模块同理；
 
 
 
-## 02---扩展知识:`cobra`（命令行工具库）
+## 02---`cobra`（命令行工具库）(docker)(**事实标准**)
 
 > # github.com/spf13/cobra 详解
 >
@@ -418,7 +418,7 @@ PS:EasySwapBackend模块同理；
 
 
 
-## 04---看使用示例才好理解
+## 04---看使用示例**才好理解**
 
 > 好的，让我详细解释这个配置加载机制：
 >
@@ -505,4 +505,105 @@ PS:EasySwapBackend模块同理；
 > 这种模式在 Go 项目中很常见，它允许用户根据不同的环境（开发、测试、生产）使用不同的配置文件，而不需要修改代码。
 
 
+
+
+
+## 05---`func init()`的执行时机
+
+> 让我解释一下 Go 语言中 `init()` 函数的执行时机：
+>
+> 1. **基本执行顺序**：
+> ```go
+> // 包级别变量初始化
+> var cfgFile string
+> 
+> // init() 函数
+> func init() {
+>     cobra.OnInitialize(initConfig)
+>     flags := rootCmd.PersistentFlags()
+>     flags.StringVarP(&cfgFile, "config", "c", "./config/config_import.toml", "config file")
+> }
+> 
+> // main() 函数
+> func main() {
+>     cmd.Execute()
+> }
+> ```
+>
+> 2. **执行时机**：
+> - `init()` 函数在包被导入时自动执行
+> - 执行顺序：
+>   1. 包级别变量初始化
+>   2. `init()` 函数执行
+>   3. `main()` 函数执行
+>
+> 3. **在 Cobra 中的特殊处理**：
+> ```go
+> func init() {
+>     // 设置initConfig在调用rootCmd的Execute()方法时运行
+>     cobra.OnInitialize(initConfig)
+>     // ...
+> }
+> ```
+> - `cobra.OnInitialize(initConfig)` 注册了一个回调函数
+> - 这个回调函数会在 `rootCmd.Execute()` 被调用时执行
+> - 这意味着 `initConfig()` 实际上是在 `main()` 函数执行后才被调用的
+>
+> 4. **完整的执行流程**：
+> ```go
+> // 1. 包被导入时
+> var cfgFile string  // 变量初始化
+> 
+> // 2. init() 执行
+> func init() {
+>     cobra.OnInitialize(initConfig)  // 注册回调
+>     // 设置命令行参数
+> }
+> 
+> // 3. main() 执行
+> func main() {
+>     cmd.Execute()  // 执行命令
+> }
+> 
+> // 4. Execute() 执行时
+> func Execute() {
+>     if err := rootCmd.Execute(); err != nil {
+>         // ...
+>     }
+>     // 此时会触发之前注册的 initConfig 回调
+> }
+> ```
+>
+> 5. **重要特点**：
+> - `init()` 函数在程序启动时自动执行
+> - 每个包可以有多个 `init()` 函数
+> - 同一个包中的多个 `init()` 函数按声明顺序执行
+> - 不同包之间的 `init()` 函数执行顺序取决于包的导入顺序
+> - `init()` 函数不能被显式调用
+>
+> 6. **在 Cobra 应用中的实际应用**：
+> ```go
+> // 1. 初始化阶段
+> func init() {
+>     // 设置命令行参数
+>     // 注册配置初始化回调
+> }
+> 
+> // 2. 执行阶段
+> func Execute() {
+>     // 执行命令时触发配置初始化
+>     // 处理命令行参数
+> }
+> ```
+>
+> 这种设计模式的优势：
+> - 实现了配置的延迟初始化
+> - 确保配置在命令执行前被正确加载
+> - 提供了灵活的配置管理机制
+> - 支持通过命令行参数覆盖默认配置
+>
+> 所以在这个项目中，`init()` 函数主要用于：
+> 1. 设置命令行参数
+> 2. 注册配置初始化回调
+> 3. 为后续的命令执行做准备
 
