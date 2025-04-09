@@ -607,3 +607,85 @@ PS:EasySwapBackend模块同理；
 > 2. 注册配置初始化回调
 > 3. 为后续的命令执行做准备
 
+
+
+## 06---再讲解`daemon.go`
+
+> 我来为您详细讲解 `daemon.go` 这个文件。这是一个使用 Go 语言编写的守护进程程序，主要用于同步 EasySwap 订单信息。让我为您分析其主要功能和结构：
+>
+> 1. **基本结构**：
+> - 文件位于 `practical/EasySwapSync/cmd/daemon.go`
+> - 使用 `cobra` 命令行框架
+> - 实现了 `DaemonCmd` 命令，用于启动同步服务
+>
+> 2. **主要功能**：
+> - 同步 EasySwap 订单信息
+> - 支持优雅退出
+> - 包含性能监控（pprof）功能
+> - 使用 zap 日志库进行日志记录
+>
+> 3. **核心代码分析**：
+>
+> ```go
+> var DaemonCmd = &cobra.Command{
+>     Use:   "daemon",
+>     Short: "sync easy swap order info.",
+>     Long:  "sync easy swap order info.",
+>     Run: func(cmd *cobra.Command, args []string) {
+>         // 初始化上下文和等待组
+>         wg := &sync.WaitGroup{}
+>         wg.Add(1)
+>         ctx := context.Background()
+>         ctx, cancel := context.WithCancel(ctx)
+> ```
+>
+> 4. **主要流程**：
+> - 初始化配置和日志系统
+> - 创建并启动同步服务
+> - 处理系统信号（SIGINT, SIGTERM）
+> - 支持优雅退出
+> - 可选开启性能监控（pprof）
+>
+> 5. **关键特性**：
+> - 使用 `context` 进行上下文管理
+> - 使用 `sync.WaitGroup` 进行并发控制
+> - 实现了优雅退出机制
+> - 支持配置文件解析
+> - 集成了性能监控功能
+>
+> 6. **错误处理**：
+> - 配置解析错误处理
+> - 日志初始化错误处理
+> - 服务启动错误处理
+> - 系统信号处理
+>
+> 7. **监控功能**：
+> ```go
+> if cfg.Monitor.PprofEnable {
+>     http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", cfg.Monitor.PprofPort), nil)
+> }
+> ```
+>
+> 8. **信号处理**：
+> ```go
+> onSignal := make(chan os.Signal)
+> signal.Notify(onSignal, syscall.SIGINT, syscall.SIGTERM)
+> ```
+>
+> 这个守护进程程序的设计非常规范，包含了：
+> - 良好的错误处理机制
+> - 完善的日志系统
+> - 优雅的退出机制
+> - 性能监控支持
+> - 并发控制
+>
+> 建议在使用时注意：
+> 1. 确保配置文件正确设置
+> 2. 合理配置日志级别
+> 3. 根据需求开启性能监控
+> 4. 注意系统资源的合理使用
+>
+> 这个程序是 EasySwap 项目的重要组成部分，负责订单信息的同步工作，对于整个系统的稳定运行至关重要。
+
+
+
