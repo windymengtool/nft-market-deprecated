@@ -1,9 +1,9 @@
 const {ethers, upgrades} = require("hardhat")
 
 /**  * 2025/02/15 in sepolia testnet
- * esVault contract deployed to: 0xaD65f3dEac0Fa9Af4eeDC96E95574AEaba6A2834
- esVault ImplementationAddress: 0x5D034EA7F15429Bcb9dFCBE08Ee493F001063AF0
- esVault AdminAddress: 0xe839419C14188F7b79a0E4C09cFaF612398e7795
+ * esVault contract deployed to: 0xAe55C41a21f04fEc0f7E0dA92680557852b0DbDF
+ esVault ImplementationAddress: 0x0e3128c2155A1E27f8e066DBB2b81A6C42854b61
+ esVault AdminAddress: 0x43BaDe3f7A206e10632DD93Aac0754b4b2F717b9
  esDex contract deployed to: 0xcEE5AA84032D4a53a0F9d2c33F36701c3eAD5895
  esDex ImplementationAddress: 0x17B2d83BFE9089cd1D676dE8aebaDCA561f55c96
  esDex AdminAddress: 0xe839419C14188F7b79a0E4C09cFaF612398e7795
