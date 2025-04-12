@@ -856,3 +856,17 @@ https_url="https://sepolia.infura.io/v3/"
 
 这里为了不改代码，按照格式进行拆分即可。
 
+
+
+
+
+# 05---带命令参数启动
+
+```bash
+go run main.go daemon
+```
+
+
+
+
+
