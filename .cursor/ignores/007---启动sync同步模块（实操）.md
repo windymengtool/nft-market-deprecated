@@ -1104,3 +1104,62 @@ go run main.go daemon
 
 
 
+
+
+## 6.4---threading.GoSafe ？
+
+> 是的，这个项目使用了 go-zero 框架。让我为您详细介绍一下：
+>
+> go-zero 是一个集成了各种工程实践的 web 和 rpc 框架，具有以下特点：
+>
+> 1. **主要特性**：
+>    - 内置高性能的 web 和 rpc 框架
+>    - 内置服务治理能力
+>    - 内置缓存管理
+>    - 内置限流、熔断、降级
+>    - 内置监控和链路追踪
+>    - 内置服务发现和负载均衡
+>
+> 2. **在项目中的使用**：
+> 从代码中我们可以看到几个 go-zero 的核心组件：
+>
+> ```go
+> // 使用 go-zero 的缓存和 KV 存储
+> "github.com/zeromicro/go-zero/core/stores/cache"
+> "github.com/zeromicro/go-zero/core/stores/kv"
+> "github.com/zeromicro/go-zero/core/stores/redis"
+> 
+> // 使用 go-zero 的并发工具
+> "github.com/zeromicro/go-zero/core/threading"
+> ```
+>
+> 3. **具体应用**：
+>    - 使用 `go-zero/core/stores/cache` 进行缓存管理
+>    - 使用 `go-zero/core/stores/redis` 进行 Redis 操作
+>    - 使用 `go-zero/core/threading` 进行并发控制
+>    - 使用 `go-zero/core/logx` 进行日志管理
+>
+> 4. **优势**：
+>    - 高性能：go-zero 框架本身性能优秀
+>    - 工程化：提供了完整的工程实践方案
+>    - 易用性：API 设计简洁，学习成本低
+>    - 可扩展性：支持自定义中间件和插件
+>
+> 5. **在项目中的应用场景**：
+>    - 缓存管理：使用 go-zero 的缓存组件管理数据
+>    - 并发控制：使用 `threading.GoSafe` 进行安全的并发操作
+>    - 服务治理：内置的服务治理能力
+>    - 监控和追踪：内置的监控和链路追踪能力
+>
+> 这个项目选择 go-zero 作为框架，主要是因为：
+> 1. 需要高性能的 web 和 rpc 服务
+> 2. 需要完善的缓存管理
+> 3. 需要良好的并发控制
+> 4. 需要完整的服务治理能力
+>
+> go-zero 的这些特性正好满足了项目的需求，使得开发更加高效和可靠。
+
+
+
+
+
