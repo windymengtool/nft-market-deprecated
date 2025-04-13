@@ -1159,3 +1159,59 @@ go run main.go daemon
 >
 > go-zero 的这些特性正好满足了项目的需求，使得开发更加高效和可靠。
 
+
+
+
+
+## 6.5---定时任务是怎么启动的?
+
+> 让我查看一下其他几个处理函数的实现来确认这一点。
+>
+> 
+>
+> Search files...
+> 从代码中可以看到，这些定时任务确实都是通过 `for` 循环加时间间隔实现的，但实现方式略有不同：
+>
+> 1. `ListenNewListingLoop` 和 `floorPriceProcess` 使用的是简单的 `for` 循环加 `time.Sleep`：
+> ```go
+> for {
+>     // ... 处理逻辑 ...
+>     time.Sleep(1 * time.Second)
+>     continue
+> }
+> ```
+>
+> 2. `orderExpiryProcess` 使用了时间轮（Time Wheel）算法，这是一个更高效的定时任务实现方式：
+> ```go
+> for {
+>     select {
+>     case <-time.After(time.Second * 1): // 每秒执行一次检查
+>         // 时间轮处理逻辑
+>     }
+> }
+> ```
+>
+> 3. `UpKeepingCollectionFloorChangeLoop` 使用了 `time.Ticker` 来实现更精确的定时任务：
+> ```go
+> timer := time.NewTicker(comm.DaySeconds * time.Second)
+> updateFloorPriceTimer := time.NewTicker(comm.MaxCollectionFloorTimeDifference * time.Second)
+> 
+> for {
+>     select {
+>     case <-timer.C:
+>         // 处理每日任务
+>     case <-updateFloorPriceTimer.C:
+>         // 处理地板价更新
+>     }
+> }
+> ```
+>
+> 总结一下：
+> 1. 简单的 `for` 循环加 `time.Sleep` 适合对时间精度要求不高的场景
+> 2. 时间轮算法适合需要处理大量定时任务的场景，效率更高
+> 3. `time.Ticker` 适合需要精确控制执行时间的场景
+>
+> 这些不同的实现方式都是基于 `for` 循环，但根据具体需求选择了不同的时间控制机制。
+
+
+
